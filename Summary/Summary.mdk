@@ -1,18 +1,63 @@
-Title         : 《并行计算》课程总结
+Title         : 《并行程序设计》知识总结
 Author        : 崔利伟
+Affiliation   : 哈尔滨工业大学
+Email         : cui@hellolw.com
 Package       : [UTF8]ctex
+name-references   : 参考
+name-abstract     : 摘要
+Locale        : Chinese
 
 [TITLE]
 
-# Madoko 
+~ Abstract
+本文是哈尔滨工业大学《并行程序设计》一课的重点总结，内容涵盖了并行程序总论，分类和涉及的方法论。
+~
 
-Madoko is a fast markdown processor for writing professional articles
-with a focus on simplicity and plain text readability.
+# 并行计算总论
 
-* Read the [reference manual].
-* Explore the upper-right toolbox menu to discover how Markdown works. 
-* `Alt-Q` reformats the current paragraph.
+## 分类
+对于每个并行任务，可以按照以下方法判断其所属类别：
 
-Enjoy!
+* 并行部分是否执行同样的指令？
+* 并行部分是否作用于同样的数据？
 
-[reference manual]: http://research.microsoft.com/en-us/um/people/daan/madoko/doc/reference.html  "Madoko reference manual"
+据此可以分为(单|双)指令(单|双)数据四种组合中的一种。
+
+### `MIMD` 进一步分类 
+对于每个多指令多数据计算机，可以继续划分：
+
+* 处理器间是否共享内存?
+* 处理器是否通过总线连接？
+
+来判断是多处理器系统还是多计算机系统。
+
+## 与分布式计算的关系
+分布式计算指*多台计算机*在地理上分布，利用网络
+
+# 多核处理器
+## 分类
+## 多核与单核、多处理器、超线程的比较
+### 单核
+### 多处理器
+### 超线程
+
+#并行算法设计
+## 方法论
+### 划分
+### 通讯
+### 组合
+### 映射
+## 评估方法
+### 延展性
+### 加速比及其定律
+### 效率
+
+# 并行程序基本概念
+## 进程
+## 线程
+## 互斥量
+
+## 信号量
+## 条件变量
+## 死锁
+## 饥饿
