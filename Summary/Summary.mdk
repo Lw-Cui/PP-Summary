@@ -4,6 +4,7 @@ Email         : cui@hellolw.com
 Package       : [UTF8]ctex
 name-references   : 参考
 name-abstract     : 摘要
+name-contents:  目录
 Locale        : Chinese
 
 [TITLE]
@@ -11,6 +12,9 @@ Locale        : Chinese
 ~ Abstract
 本文是哈尔滨工业大学《并行程序设计》一课的重点总结，内容涵盖了并行程序总论，分类和方法论，概念辨析和具体的实现方法以及性能分析。其中加入了许多作者的理解。
 ~
+
+[TOC]
+
 
 # 并行计算总论 
 
@@ -109,17 +113,19 @@ $Efficiency = \frac{Speedup * 100}{n}$ n为处理器数目
 ## 数据竞争
 多个线程试图修改一个变量时会发生竞争。则常常是由于错误地假定线程调度存在依赖关系所导致的。
 
-# `Windows` 多线程 `API`
+# `Windows` 多线程编程
 
 ## `Win32 API` 示例
 ``` java
+#define NUMTHREADS 4
 DWORD WINAPI helloFunc(LPVOID arg) {
-  printf("Hello thread\n");
   return 0;
 }
 main() {
-  HANDLE hThread = CreateThread(NULL, 0, helloFunc, NULL, 0, NULL);
-  WaitForSingleObjects(hThread, INFINITE);
+  HANDLE hThread[NUMTHREADS];
+  for (int i = 0; i < NUMTHREADS; i++)
+    hThread[i] = CreateThread(NULL, 0, helloFunc, NULL, 0, NULL);
+  WaitForMultipleObject(NUMTHREADS, hThread, TRUE, INFINITE);
 }
 ```
 
@@ -152,8 +158,8 @@ DWORD WINAPI threadFunc(LPVOID arg) {
   return 0;
 }
 main() {
-  HANDLE hThread[NUMTHREADS];
   InitializeCriticalSection(&g_cs);
+  HANDLE hThread[NUMTHREADS];
   for (int i = 0; i < NUMTHREADS; i++)
     hThread[i] = CreateThread(NULL, 0, threadFunc, NULL, 0, NULL);
   WaitForMultipleObject(NUMTHREADS, hThread, TRUE, INFINITE);
@@ -163,11 +169,46 @@ main() {
 
 ## 通过*互斥量(Mutexes)*同步线程
 ```java
-DWORD ThreadProc(void *pData) {
+#define NUMTHREADS 4
+int g_sum = 0;
+DWORD ThreadProc() {
   HANDLE hMutex;
   hMutex = OpenMutex(MUTEX_ALL_ACCESS, FALSE, "Mutex.Test");
+  g_sum += 1;
   ReleaseMutex(hMutex);
   CloseHandle(hMutex);
   return 0;
 }
+main() {
+  HANDLE hMutex;
+  hMutex = OpenMutex(MUTEX_ALL_ACCESS, FALSE, "Mutex.Test");
+  hMutex = CreateMutex(NULL, FALSE, "Mutex.Test");
+  HANDLE hThread[NUMTHREADS];
+  for (int i = 0; i < NUMTHREADS; i++)
+    hThread[i] = CreateThread(NULL, 0, threadProc, NULL, 0, NULL);
+  WaitForMultipleObject(NUMTHREADS, hThread, TRUE, INFINITE);
+  CloseHandle(hMutex);
+}
 ```
+
+## 通过*信号量(Semaphore)* 同步线程
+```java
+#define NUMTHREADS 4
+HANDLE hSem;
+int g_sum;
+DWORD WINAPI CountFives(LPVOID arg) {
+  WaitForSingleObject(hSem, INFINIT);
+  g_sum += 1;
+  ReleaseSemaphore(hSem, 1, NULL);
+}
+main() {
+  hSem = CreateSemphore(NULL, 1, 1, NULL);
+  HANDLE hThread[NUMTHREADS];
+  for (int i = 0; i < NUMTHREADS; i++)
+    hThread[i] = CreateThread(NULL, 0, threadProc, NULL, 0, NULL);
+  WaitForMultipleObject(NUMTHREADS, hThread, TRUE, INFINITE);
+}
+```
+
+# `OpenMP` 多线程编程
+## 并行区(Parallel Regions)
