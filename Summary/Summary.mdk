@@ -211,4 +211,34 @@ main() {
 ```
 
 # `OpenMP` 多线程编程
-## 并行区(Parallel Regions)
+## *并行区域(Parallel Regions)*
+多个线程执行同一区域：
+```java
+  omp_set_num_threads(4);
+  #pragma omp parallel
+  {
+    int ID = omp_get_thread_num();
+  }
+```
+
+## 并行循环
+```java
+  #pragma omp parallel
+  #pragma omp for
+  for (int i = 0; i < N; i++)
+    ..do something;
+```
+
+## *并行区(Parallel Sections)*
+为线程分配任务：
+```java
+  #pragma omp parallel sections
+  {
+    #pragma omp section
+    phase1();
+    #pragma omp section
+    phase2();
+    #pragma omp section
+    phase3();
+  }
+```
