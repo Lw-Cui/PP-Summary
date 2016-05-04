@@ -106,3 +106,68 @@ $Efficiency = \frac{Speedup * 100}{n}$ n为处理器数目
 ## 饥饿 
 某个线程由于某种原因无法获得继续执行的权限，只好一直处于阻塞状态。
 
+## 数据竞争
+多个线程试图修改一个变量时会发生竞争。则常常是由于错误地假定线程调度存在依赖关系所导致的。
+
+# `Windows` 多线程 `API`
+
+## `Win32 API` 示例
+``` java
+DWORD WINAPI helloFunc(LPVOID arg) {
+  printf("Hello thread\n");
+  return 0;
+}
+main() {
+  HANDLE hThread = CreateThread(NULL, 0, helloFunc, NULL, 0, NULL);
+  WaitForSingleObjects(hThread, INFINITE);
+}
+```
+
+## 通过*事件(Event)*同步线程
+``` java
+HANDLE evRead, evFinish;
+void readThread(LPVOID param) {
+  WaitForSingleObject(evRead, INFINITE);
+  SetEvent(EvFinish);
+}
+void WriteThread(LDVOID param) {
+  SetEvent(EvRead);
+}
+main() {
+  evRead = CreateEvent(NULL, FALSE, FALSE, NULL);
+  evFinish = CreateEvent(NULL, FALSE, FALSE, NULL);
+  _beginthread(ReadThread, 0, NULL);
+  _beginthread(WriteThread, 0, NULL);
+  WaitForSingleObject(evFinish, INFINITE);
+}
+```
+
+## 通过*临界区(Critial Section)*同步线程
+```java
+#define NUMTHREADS 4
+CRITICAL_SECTION g_cs;
+int g_sum = 0;
+DWORD WINAPI threadFunc(LPVOID arg) {
+  g_sum += 1;
+  return 0;
+}
+main() {
+  HANDLE hThread[NUMTHREADS];
+  InitializeCriticalSection(&g_cs);
+  for (int i = 0; i < NUMTHREADS; i++)
+    hThread[i] = CreateThread(NULL, 0, threadFunc, NULL, 0, NULL);
+  WaitForMultipleObject(NUMTHREADS, hThread, TRUE, INFINITE);
+  DeleteCriticalSection(&g_cs);
+}
+```
+
+## 通过*互斥量(Mutexes)*同步线程
+```java
+DWORD ThreadProc(void *pData) {
+  HANDLE hMutex;
+  hMutex = OpenMutex(MUTEX_ALL_ACCESS, FALSE, "Mutex.Test");
+  ReleaseMutex(hMutex);
+  CloseHandle(hMutex);
+  return 0;
+}
+```
