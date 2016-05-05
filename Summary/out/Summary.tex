@@ -641,7 +641,27 @@ main()~\{\\
 \item\mdline{360}网格环： \mdline{360}$t_{sum} = 2t_s(\sqrt {p} - 1) + mt_w(p  - 1)$\mdline{360} 横向进行圆环型广播，之后进行纵向广播%mdk
 
 %mdk-data-line={361}
-\item\mdline{361}超立方体：  \mdline{361}$t_{sum} = t_s{\log _2 p} + mt_w(p - 1)$\mdline{361}  每个点分别和前后，上下，左右的点进行数据的交换%mdk
+\item\mdline{361}超立方体：  \mdline{361}$t_{sum} = \sum^{\log _2 p}_{i=1}{(t_s+2^{i - 1}m{t_w})}$\mdline{361}  (即\mdline{361}$t_{sum} = t_s{\log _2 p} + mt_w(p - 1)$\mdline{361})每个点分别和前后，上下，左右的点进行数据的交换%mdk
+%mdk
+\end{itemize}%mdk
+
+%mdk-data-line={363}
+\subsubsection{\mdline{363}7.6.4.\hspace*{0.5em}\mdline{363}散播(\mdline{363}\emph{Scatter}\mdline{363})/聚集(\mdline{363}\emph{Gather}\mdline{363})}\label{sec--scatter--gather-}%mdk%mdk
+
+%mdk-data-line={365}
+\noindent\mdline{365}散播指某一个节点上的p个数据包分给包含自己在内的p个节点。聚集为散播的逆过程。与多对多广播用时相同。%mdk
+
+%mdk-data-line={367}
+\begin{itemize}[noitemsep,topsep=\mdcompacttopsep]%mdk
+
+%mdk-data-line={367}
+\item\mdline{367}圆环：\mdline{367}$t_{sum} = (t_s + mt_w)(p - 1)$\mdline{367}%mdk
+
+%mdk-data-line={368}
+\item\mdline{368}网格环： \mdline{368}$t_{sum} = 2t_s(\sqrt {p} - 1) + mt_w(p  - 1)$\mdline{368}%mdk
+
+%mdk-data-line={369}
+\item\mdline{369}超立方体：  \mdline{369}$t_{sum} = \sum^{\log _2 p}_{i=1}{(t_s+2^{i - 1}m{t_w})}$\mdline{369}(即\mdline{369}$t_{sum} = t_s{\log _2 p} + mt_w(p - 1)$\mdline{369})%mdk
 %mdk
 \end{itemize}%mdk%mdk
 
