@@ -13,10 +13,7 @@ Locale        : Chinese
 本文是哈尔滨工业大学《并行程序设计》一课的重点总结，内容涵盖了并行程序总论，分类和方法论，概念辨析和具体的实现方法以及性能分析。其中加入了许多作者的理解。
 ~
 
-[TOC]
-
-
-# 并行计算总论 
+# 并行计算总论
 
 ## 分类 
 对于每个并行任务，可以按照以下方法判断其所属类别：
@@ -45,7 +42,7 @@ Locale        : Chinese
 根据计算内核的地位是否对等，可分为同构多核和异构多核。
 
 ## 多核与单核、多处理器、超线程的比较 
-### 与单核 
+### 与单核
 单核仅有一个计算核心，其上的多个线程由`CPU`进行调度，时间片不重叠。
 
 ### 与多处理器 
@@ -115,7 +112,7 @@ $Efficiency = \frac{Speedup * 100}{n}$ n为处理器数目
 
 # `Windows` 多线程编程
 
-## `Win32 API` 示例
+## `Win32` 标准示例
 ``` java
 #define NUMTHREADS 4
 DWORD WINAPI helloFunc(LPVOID arg) {
@@ -129,7 +126,62 @@ main() {
 }
 ```
 
-## 通过*事件(Event)*同步线程
+## 线程同步机制
+
+### 通过*临界区(Critial Section)*同步线程
+```java
+#define NUMTHREADS 4
+CRITICAL_SECTION g_cs;
+int g_sum = 0;
+DWORD WINAPI threadFunc(LPVOID arg) {
+  g_sum += 1;
+  return 0;
+}
+main() {
+  InitializeCriticalSection(&g_cs);
+  // 标准示例
+  DeleteCriticalSection(&g_cs);
+}
+```
+
+### 通过*互斥量(Mutexes)*同步线程
+```java
+#define NUMTHREADS 4
+int g_sum = 0;
+DWORD ThreadProc() {
+  HANDLE hMutex;
+  hMutex = OpenMutex(MUTEX_ALL_ACCESS, FALSE, "Mutex.Test");
+  g_sum += 1;
+  ReleaseMutex(hMutex);
+  CloseHandle(hMutex);
+  return 0;
+}
+main() {
+  HANDLE hMutex;
+  hMutex = OpenMutex(MUTEX_ALL_ACCESS, FALSE, "Mutex.Test");
+  hMutex = CreateMutex(NULL, FALSE, "Mutex.Test");
+  // 标准示例
+  CloseHandle(hMutex);
+}
+```
+
+### 通过*信号量(Semaphore)* 同步线程
+```java
+#define NUMTHREADS 4
+HANDLE hSem;
+int g_sum;
+DWORD WINAPI CountFives(LPVOID arg) {
+  WaitForSingleObject(hSem, INFINIT);
+  g_sum += 1;
+  ReleaseSemaphore(hSem, 1, NULL);
+}
+main() {
+  hSem = CreateSemphore(NULL, 1, 1, NULL);
+  // 标准示例
+}
+```
+
+### 通过*事件(Event)*同步线程
 ``` java
 HANDLE evRead, evFinish;
 void readThread(LPVOID param) {
@@ -148,71 +200,17 @@ main() {
 }
 ```
 
-## 通过*临界区(Critial Section)*同步线程
-```java
-#define NUMTHREADS 4
-CRITICAL_SECTION g_cs;
-int g_sum = 0;
-DWORD WINAPI threadFunc(LPVOID arg) {
-  g_sum += 1;
-  return 0;
-}
-main() {
-  InitializeCriticalSection(&g_cs);
-  HANDLE hThread[NUMTHREADS];
-  for (int i = 0; i < NUMTHREADS; i++)
-    hThread[i] = CreateThread(NULL, 0, threadFunc, NULL, 0, NULL);
-  WaitForMultipleObject(NUMTHREADS, hThread, TRUE, INFINITE);
-  DeleteCriticalSection(&g_cs);
-}
-```
-
-## 通过*互斥量(Mutexes)*同步线程
-```java
-#define NUMTHREADS 4
-int g_sum = 0;
-DWORD ThreadProc() {
-  HANDLE hMutex;
-  hMutex = OpenMutex(MUTEX_ALL_ACCESS, FALSE, "Mutex.Test");
-  g_sum += 1;
-  ReleaseMutex(hMutex);
-  CloseHandle(hMutex);
-  return 0;
-}
-main() {
-  HANDLE hMutex;
-  hMutex = OpenMutex(MUTEX_ALL_ACCESS, FALSE, "Mutex.Test");
-  hMutex = CreateMutex(NULL, FALSE, "Mutex.Test");
-  HANDLE hThread[NUMTHREADS];
-  for (int i = 0; i < NUMTHREADS; i++)
-    hThread[i] = CreateThread(NULL, 0, threadProc, NULL, 0, NULL);
-  WaitForMultipleObject(NUMTHREADS, hThread, TRUE, INFINITE);
-  CloseHandle(hMutex);
-}
-```
-
-## 通过*信号量(Semaphore)* 同步线程
-```java
-#define NUMTHREADS 4
-HANDLE hSem;
-int g_sum;
-DWORD WINAPI CountFives(LPVOID arg) {
-  WaitForSingleObject(hSem, INFINIT);
-  g_sum += 1;
-  ReleaseSemaphore(hSem, 1, NULL);
-}
-main() {
-  hSem = CreateSemphore(NULL, 1, 1, NULL);
-  HANDLE hThread[NUMTHREADS];
-  for (int i = 0; i < NUMTHREADS; i++)
-    hThread[i] = CreateThread(NULL, 0, threadProc, NULL, 0, NULL);
-  WaitForMultipleObject(NUMTHREADS, hThread, TRUE, INFINITE);
-}
-```
-
 # `OpenMP` 多线程编程
-## *并行区域(Parallel Regions)*
-多个线程执行同一区域：
+## 概述
+`OpenMP`使用编译制导语句，结合库和环境变量实现共享内存环境下的并行。指导语句结构如下：
+
+```java
+  #pragma omp construct [clause [clause] ...]
+```
+
+## 数据并行
+### 使用*并行区域*实现
+*并行区域*指的是多个线程重复执行某一区域的代码。注意：在最后一个线程执行完并行区域之前所有线程均被阻塞。可以使用`nowait`表示符关闭同步。
 ```java
   omp_set_num_threads(4);
   #pragma omp parallel
@@ -221,16 +219,17 @@ main() {
   }
 ```
 
-## 并行循环
+### 使用 `pragma omp for`实现
+指导语句`#pragma omp for` 建立在 `#pragma omp parallel`创建线程的基础上，实现多个线程自动分割循环。
 ```java
   #pragma omp parallel
   #pragma omp for
   for (int i = 0; i < N; i++)
-    ..do something;
+    c[i] = a[i] + b[i];
 ```
 
-## *并行区(Parallel Sections)*
-为线程分配任务：
+## 指令并行
+`OpenMP`使用*并行区(Parallel Sections)*为线程分配任务，即指令并行而非数据并行。
 ```java
   #pragma omp parallel sections
   {
@@ -242,3 +241,24 @@ main() {
     phase3();
   }
 ```
+
+## 其他制导语句
+### 私有变量
+在并行区外的变量均为所有线程共享，可以通过在`omp parallel for`后接入`private`来声明某变量为各个线程所私有：
+```java
+  float x, y; int i;
+  #pragma omp parallel for private(x, y)
+  for (i = 0; i < N; i++)
+    c[i] = x + y;
+```
+
+### 原子性
+某操作为*原子的*指该操作不可分割成更小的操作，因此不会受到线程竞争的影响。
+```java
+  #pragma omp parallel for
+  for (int i = 0; i < n; i++)
+    #pragma omp atmoic
+    c[i] += i;
+```
+
+# 并行算法的通信开销
