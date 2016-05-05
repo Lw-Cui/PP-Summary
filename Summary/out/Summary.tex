@@ -11,249 +11,252 @@
 
 
 
-%mdk-data-line={9}
+%mdk-data-line={10}
 \mdxtitleblockstart{}
-%mdk-data-line={9}
-\mdxtitle{\mdline{9}《并行程序设计》知识总结}%mdk
+%mdk-data-line={10}
+\mdxtitle{\mdline{10}《并行程序设计》知识总结}%mdk
 \mdxauthorstart{}
-%mdk-data-line={14}
-\mdxauthorname{\mdline{14}崔利伟}%mdk
+%mdk-data-line={15}
+\mdxauthorname{\mdline{15}崔利伟}%mdk
 
-%mdk-data-line={17}
-\mdxauthoremail{\mdline{17}cui@hellolw.com}%mdk
+%mdk-data-line={18}
+\mdxauthoremail{\mdline{18}cui@hellolw.com}%mdk
 \mdxauthorend\mdtitleauthorrunning{}{}\mdxtitleblockend%mdk
 
-%mdk-data-line={11}
+%mdk-data-line={12}
 \begin{abstract}%mdk
 
-%mdk-data-line={12}
-\noindent\mdline{12}本文是哈尔滨工业大学《并行程序设计》一课的重点总结，内容涵盖了并行程序总论，分类和方法论，概念辨析和具体的实现方法以及性能分析。其中加入了许多作者的理解。%mdk
+%mdk-data-line={13}
+\noindent\mdline{13}本文是哈尔滨工业大学《并行程序设计》一课的重点总结，内容涵盖了并行程序总论，分类和方法论，概念辨析和具体的实现方法以及性能分析。其中加入了许多作者的理解。%mdk
 %mdk
 \end{abstract}%mdk
 
-%mdk-data-line={15}
-\section{\mdline{15}1.\hspace*{0.5em}\mdline{15}并行计算总论}\label{section}%mdk%mdk
-
-%mdk-data-line={17}
-\subsection{\mdline{17}1.1.\hspace*{0.5em}\mdline{17}分类}\label{section}%mdk%mdk
+%mdk-data-line={16}
+\section{\mdline{16}1.\hspace*{0.5em}\mdline{16}并行计算总论}\label{section}%mdk%mdk
 
 %mdk-data-line={18}
-\noindent\mdline{18}对于每个并行任务，可以按照以下方法判断其所属类别：%mdk
+\subsection{\mdline{18}1.1.\hspace*{0.5em}\mdline{18}分类}\label{section}%mdk%mdk
 
-%mdk-data-line={20}
-\begin{itemize}[noitemsep,topsep=\mdcompacttopsep]%mdk
-
-%mdk-data-line={20}
-\item\mdline{20}并行部分是否执行同样的指令？%mdk
+%mdk-data-line={19}
+\noindent\mdline{19}对于每个并行任务，可以按照以下方法判断其所属类别：%mdk
 
 %mdk-data-line={21}
-\item\mdline{21}并行部分是否作用于同样的数据？%mdk
+\begin{itemize}[noitemsep,topsep=\mdcompacttopsep]%mdk
+
+%mdk-data-line={21}
+\item\mdline{21}并行部分是否执行同样的指令？%mdk
+
+%mdk-data-line={22}
+\item\mdline{22}并行部分是否作用于同样的数据？%mdk
 %mdk
 \end{itemize}%mdk
 
-%mdk-data-line={23}
-\noindent\mdline{23}据此可以分为(单\textbar{}双)指令(单\textbar{}双)数据四种组合中的一种。%mdk
-
-%mdk-data-line={25}
-\subsubsection{\mdline{25}1.1.1.\hspace*{0.5em}\mdline{25}\mdcode{MIMD}\mdline{25} 进一步分类}\label{sec-mimd-}%mdk%mdk
+%mdk-data-line={24}
+\noindent\mdline{24}据此可以分为(单\textbar{}双)指令(单\textbar{}双)数据四种组合中的一种。%mdk
 
 %mdk-data-line={26}
-\noindent\mdline{26}对于每个多指令多数据计算机，可以继续划分：%mdk
+\subsubsection{\mdline{26}1.1.1.\hspace*{0.5em}\mdline{26}\mdcode{MIMD}\mdline{26} 进一步分类}\label{sec-mimd-}%mdk%mdk
 
-%mdk-data-line={28}
-\begin{itemize}[noitemsep,topsep=\mdcompacttopsep]%mdk
-
-%mdk-data-line={28}
-\item\mdline{28}处理器间是否共享内存?%mdk
+%mdk-data-line={27}
+\noindent\mdline{27}对于每个多指令多数据计算机，可以继续划分：%mdk
 
 %mdk-data-line={29}
-\item\mdline{29}处理器是否通过总线连接？%mdk
+\begin{itemize}[noitemsep,topsep=\mdcompacttopsep]%mdk
+
+%mdk-data-line={29}
+\item\mdline{29}处理器间是否共享内存?%mdk
+
+%mdk-data-line={30}
+\item\mdline{30}处理器是否通过总线连接？%mdk
 %mdk
 \end{itemize}%mdk
 
-%mdk-data-line={31}
-\noindent\mdline{31}来判断是多处理器系统还是多计算机系统。%mdk
-
-%mdk-data-line={33}
-\subsection{\mdline{33}1.2.\hspace*{0.5em}\mdline{33}与分布式计算的区别}\label{section}%mdk%mdk
+%mdk-data-line={32}
+\noindent\mdline{32}来判断是多处理器系统还是多计算机系统。%mdk
 
 %mdk-data-line={34}
-\begin{itemize}[noitemsep,topsep=\mdcompacttopsep]%mdk
-
-%mdk-data-line={34}
-\item\mdline{34}分布式计算指多台\mdline{34}\textbf{计算机}\mdline{34}在\mdline{34}\textbf{地理}\mdline{34}上分布，利用\mdline{34}\textbf{网络通信}\mdline{34}进行协作来完成任务。%mdk
+\subsection{\mdline{34}1.2.\hspace*{0.5em}\mdline{34}与分布式计算的区别}\label{section}%mdk%mdk
 
 %mdk-data-line={35}
-\item\mdline{35}并行计算指多个\mdline{35}\textbf{处理器同时}\mdline{35}进行协作，分别完成某一任务的子任务。这些处理器可以在一台计算机上，也可以在多台。%mdk
-%mdk
-\end{itemize}%mdk
-
-%mdk-data-line={37}
-\noindent\mdline{37}因此，两者互不包含，但有交集。%mdk
-
-%mdk-data-line={39}
-\section{\mdline{39}2.\hspace*{0.5em}\mdline{39}多核处理器}\label{section}%mdk%mdk
-
-%mdk-data-line={40}
-\subsection{\mdline{40}2.1.\hspace*{0.5em}\mdline{40}分类}\label{section}%mdk%mdk
-
-%mdk-data-line={41}
-\noindent\mdline{41}根据计算内核的地位是否对等，可分为同构多核和异构多核。%mdk
-
-%mdk-data-line={43}
-\subsection{\mdline{43}2.2.\hspace*{0.5em}\mdline{43}多核与单核、多处理器、超线程的比较}\label{section}%mdk%mdk
-
-%mdk-data-line={44}
-\subsubsection{\mdline{44}2.2.1.\hspace*{0.5em}\mdline{44}与单核}\label{section}%mdk%mdk
-
-%mdk-data-line={45}
-\noindent\mdline{45}单核仅有一个计算核心，其上的多个线程由\mdline{45}\mdcode{CPU}\mdline{45}进行调度，时间片不重叠。%mdk
-
-%mdk-data-line={47}
-\subsubsection{\mdline{47}2.2.2.\hspace*{0.5em}\mdline{47}与多处理器}\label{section}%mdk%mdk
-
-%mdk-data-line={48}
-\noindent\mdline{48}多处理器指有主板上搭载多块\mdline{48}\mdcode{CPU}\mdline{48}，不共享\mdline{48}\mdcode{cache}\mdline{48}，通过总线连接，而多核处理器指一块单晶硅上集成多个核心。%mdk
-
-%mdk-data-line={50}
-\subsubsection{\mdline{50}2.2.3.\hspace*{0.5em}\mdline{50}与超线程}\label{section}%mdk%mdk
-
-%mdk-data-line={51}
-\noindent\mdline{51}超线程为\mdline{51}\mdcode{Intel}\mdline{51}实现的硬件级别的多线程，通过将去往不同计算单元（如整型和浮点型）的指令流同时运行来获得提升。%mdk
-
-%mdk-data-line={53}
-\section{\mdline{53}3.\hspace*{0.5em}\mdline{53}并行算法设计}\label{section}%mdk%mdk
-
-%mdk-data-line={54}
-\subsection{\mdline{54}3.1.\hspace*{0.5em}\mdline{54}方法论}\label{section}%mdk%mdk
-
-%mdk-data-line={55}
-\noindent\mdline{55}我们以找出一个具有n个元素的序列最大值来说明\mdline{55}\mdcode{Foster}\mdline{55}方法论。%mdk
-
-%mdk-data-line={57}
-\subsubsection{\mdline{57}3.1.1.\hspace*{0.5em}\mdline{57}划分}\label{section}%mdk%mdk
-
-%mdk-data-line={58}
-\noindent\mdline{58}由于该序列有n个元素，为了尽量精细所以将其划分为n个任务，每个任务对应一个数值。%mdk
-
-%mdk-data-line={60}
-\subsubsection{\mdline{60}3.1.2.\hspace*{0.5em}\mdline{60}通讯}\label{section}%mdk%mdk
-
-%mdk-data-line={61}
-\noindent\mdline{61}由于每个任务不能直接访问另一个任务的数据，所以我们需要为其建立联系。在第一步中，一半任务发送自己的值，另一半接收。之后，发送方任务终止，接收方计算两者的最大值。对剩下的任务递归该过程，一半发一半接直到剩下一个任务。这个任务的计算结果为最终结果。%mdk
-
-%mdk-data-line={63}
-\subsubsection{\mdline{63}3.1.3.\hspace*{0.5em}\mdline{63}映射}\label{section}%mdk%mdk
-
-%mdk-data-line={64}
-\noindent\mdline{64}如果n远远大于我们的处理器数p，我们可以将n个任务进行组合，每个处理器分配\mdline{64}$\frac{n}{p}$\mdline{64}个子任务来使得通信的开销最小。%mdk
-
-%mdk-data-line={66}
-\subsubsection{\mdline{66}3.1.4.\hspace*{0.5em}\mdline{66}聚集}\label{section}%mdk%mdk
-
-%mdk-data-line={67}
-\noindent\mdline{67}我们发现在一个物理处理器上保留这\mdline{67}$\frac{n}{p}$\mdline{67}子任务毫无意义。所以将这些子任务聚集为一个具有\mdline{67}$\frac{n}{p}$\mdline{67}个数值的任务是更好的选择。%mdk
-
-%mdk-data-line={69}
-\subsection{\mdline{69}3.2.\hspace*{0.5em}\mdline{69}评估方法}\label{section}%mdk%mdk
-
-%mdk-data-line={70}
-\subsubsection{\mdline{70}3.2.1.\hspace*{0.5em}\mdline{70}延展性}\label{section}%mdk%mdk
-
-%mdk-data-line={71}
-\noindent\mdline{71}单处理器在给定时间内完成n的工作，并行后在同样的时间内完成m的工作，延展性为\mdline{71}$\frac{m}{n}$\mdline{71}。%mdk
-
-%mdk-data-line={73}
-\subsubsection{\mdline{73}3.2.2.\hspace*{0.5em}\mdline{73}加速比及其定律}\label{section}%mdk%mdk
-
-%mdk-data-line={74}
 \begin{itemize}[noitemsep,topsep=\mdcompacttopsep]%mdk
 
-%mdk-data-line={74}
-\item\mdline{74}加速比：\mdline{74}$Speedup = \frac{u}{m}$\mdline{74} 其中u为单个处理器完成任务用时，m为并行系统完成任务用时%mdk
+%mdk-data-line={35}
+\item\mdline{35}分布式计算指多台\mdline{35}\textbf{计算机}\mdline{35}在\mdline{35}\textbf{地理}\mdline{35}上分布，利用\mdline{35}\textbf{网络通信}\mdline{35}进行协作来完成任务。%mdk
 
-%mdk-data-line={75}
-\item\mdline{75}Amdahl 定律： \mdline{75}$Maximum Speedup = \frac{S + P}{S + \frac{P}{n}} = \frac{1}{S + \frac{P}{n}}$\mdline{75} 其中S为任务中串行部分用时，P为并行部分用时，n为处理器数, \mdline{75}$S + P = 1$\mdline{75}%mdk
-
-%mdk-data-line={76}
-\item\mdline{76}Gustafson 定律： \mdline{76}$Maximum Speedup = \frac{S + (P * n)}{S + P} = n + (1 - n) *S$\mdline{76}%mdk
+%mdk-data-line={36}
+\item\mdline{36}并行计算指多个\mdline{36}\textbf{处理器同时}\mdline{36}进行协作，分别完成某一任务的子任务。这些处理器可以在一台计算机上，也可以在多台。%mdk
 %mdk
 \end{itemize}%mdk
 
-%mdk-data-line={78}
-\noindent\mdline{78}两个定律的区别在于是否认为所完成的任务量应该随着处理器增多而变大。%mdk
+%mdk-data-line={38}
+\noindent\mdline{38}因此，两者互不包含，但有交集。%mdk
 
-%mdk-data-line={80}
-\subsubsection{\mdline{80}3.2.3.\hspace*{0.5em}\mdline{80}效率}\label{section}%mdk%mdk
+%mdk-data-line={40}
+\section{\mdline{40}2.\hspace*{0.5em}\mdline{40}多核处理器}\label{section}%mdk%mdk
+
+%mdk-data-line={41}
+\subsection{\mdline{41}2.1.\hspace*{0.5em}\mdline{41}分类}\label{section}%mdk%mdk
+
+%mdk-data-line={42}
+\noindent\mdline{42}根据计算内核的地位是否对等，可分为同构多核和异构多核。%mdk
+
+%mdk-data-line={44}
+\subsection{\mdline{44}2.2.\hspace*{0.5em}\mdline{44}多核与单核、多处理器、超线程的比较}\label{section}%mdk%mdk
+
+%mdk-data-line={45}
+\subsubsection{\mdline{45}2.2.1.\hspace*{0.5em}\mdline{45}与单核}\label{section}%mdk%mdk
+
+%mdk-data-line={46}
+\noindent\mdline{46}单核仅有一个计算核心，其上的多个线程由\mdline{46}\mdcode{CPU}\mdline{46}进行调度，时间片不重叠。%mdk
+
+%mdk-data-line={48}
+\subsubsection{\mdline{48}2.2.2.\hspace*{0.5em}\mdline{48}与多处理器}\label{section}%mdk%mdk
+
+%mdk-data-line={49}
+\noindent\mdline{49}多处理器指有主板上搭载多块\mdline{49}\mdcode{CPU}\mdline{49}，不共享\mdline{49}\mdcode{cache}\mdline{49}，通过总线连接，而多核处理器指一块单晶硅上集成多个核心。%mdk
+
+%mdk-data-line={51}
+\subsubsection{\mdline{51}2.2.3.\hspace*{0.5em}\mdline{51}与超线程}\label{section}%mdk%mdk
+
+%mdk-data-line={52}
+\noindent\mdline{52}超线程为\mdline{52}\mdcode{Intel}\mdline{52}实现的硬件级别的多线程，通过将去往不同计算单元（如整型和浮点型）的指令流同时运行来获得提升。%mdk
+
+%mdk-data-line={54}
+\section{\mdline{54}3.\hspace*{0.5em}\mdline{54}并行算法设计}\label{section}%mdk%mdk
+
+%mdk-data-line={55}
+\subsection{\mdline{55}3.1.\hspace*{0.5em}\mdline{55}方法论}\label{section}%mdk%mdk
+
+%mdk-data-line={56}
+\noindent\mdline{56}我们以找出一个具有n个元素的序列最大值来说明\mdline{56}\mdcode{Foster}\mdline{56}方法论。%mdk
+
+%mdk-data-line={58}
+\subsubsection{\mdline{58}3.1.1.\hspace*{0.5em}\mdline{58}划分}\label{section}%mdk%mdk
+
+%mdk-data-line={59}
+\noindent\mdline{59}由于该序列有n个元素，为了尽量精细所以将其划分为n个任务，每个任务对应一个数值。%mdk
+
+%mdk-data-line={61}
+\subsubsection{\mdline{61}3.1.2.\hspace*{0.5em}\mdline{61}通讯}\label{section}%mdk%mdk
+
+%mdk-data-line={62}
+\noindent\mdline{62}由于每个任务不能直接访问另一个任务的数据，所以我们需要为其建立联系。在第一步中，一半任务发送自己的值，另一半接收。之后，发送方任务终止，接收方计算两者的最大值。对剩下的任务递归该过程，一半发一半接直到剩下一个任务。这个任务的计算结果为最终结果。%mdk
+
+%mdk-data-line={64}
+\subsubsection{\mdline{64}3.1.3.\hspace*{0.5em}\mdline{64}映射}\label{section}%mdk%mdk
+
+%mdk-data-line={65}
+\noindent\mdline{65}如果n远远大于我们的处理器数p，我们可以将n个任务进行组合，每个处理器分配\mdline{65}$\frac{n}{p}$\mdline{65}个子任务来使得通信的开销最小。%mdk
+
+%mdk-data-line={67}
+\subsubsection{\mdline{67}3.1.4.\hspace*{0.5em}\mdline{67}聚集}\label{section}%mdk%mdk
+
+%mdk-data-line={68}
+\noindent\mdline{68}我们发现在一个物理处理器上保留这\mdline{68}$\frac{n}{p}$\mdline{68}子任务毫无意义。所以将这些子任务聚集为一个具有\mdline{68}$\frac{n}{p}$\mdline{68}个数值的任务是更好的选择。%mdk
+
+%mdk-data-line={70}
+\subsection{\mdline{70}3.2.\hspace*{0.5em}\mdline{70}评估方法}\label{section}%mdk%mdk
+
+%mdk-data-line={71}
+\subsubsection{\mdline{71}3.2.1.\hspace*{0.5em}\mdline{71}延展性}\label{section}%mdk%mdk
+
+%mdk-data-line={72}
+\noindent\mdline{72}单处理器在给定时间内完成n的工作，并行后在同样的时间内完成m的工作，延展性为\mdline{72}$\frac{m}{n}$\mdline{72}。%mdk
+
+%mdk-data-line={74}
+\subsubsection{\mdline{74}3.2.2.\hspace*{0.5em}\mdline{74}加速比及其定律}\label{section}%mdk%mdk
+
+%mdk-data-line={75}
+\begin{itemize}[noitemsep,topsep=\mdcompacttopsep]%mdk
+
+%mdk-data-line={75}
+\item\mdline{75}加速比：\mdline{75}$Speedup = \frac{u}{m}$\mdline{75} 其中u为单个处理器完成任务用时，m为并行系统完成任务用时%mdk
+
+%mdk-data-line={76}
+\item\mdline{76}Amdahl 定律： \mdline{76}$Maximum Speedup = \frac{S + P}{S + \frac{P}{n}} = \frac{1}{S + \frac{P}{n}}$\mdline{76} 其中S为任务中串行部分用时，P为并行部分用时，n为处理器数, \mdline{76}$S + P = 1$\mdline{76}%mdk
+
+%mdk-data-line={77}
+\item\mdline{77}Gustafson 定律： \mdline{77}$Maximum Speedup = \frac{S + (P * n)}{S + P} = n + (1 - n) *S$\mdline{77}%mdk
+%mdk
+\end{itemize}%mdk
+
+%mdk-data-line={79}
+\noindent\mdline{79}两个定律的区别在于是否认为所完成的任务量应该随着处理器增多而变大。%mdk
 
 %mdk-data-line={81}
-\noindent\mdline{81}$Efficiency = \frac{Speedup * 100}{n}$\mdline{81} n为处理器数目%mdk
+\subsubsection{\mdline{81}3.2.3.\hspace*{0.5em}\mdline{81}效率}\label{section}%mdk%mdk
 
-%mdk-data-line={83}
-\section{\mdline{83}4.\hspace*{0.5em}\mdline{83}并行程序基本概念}\label{section}%mdk%mdk
+%mdk-data-line={82}
+\noindent\mdline{82}$Efficiency = \frac{Speedup * 100}{n}$\mdline{82}%mdk
 
 %mdk-data-line={84}
-\subsection{\mdline{84}4.1.\hspace*{0.5em}\mdline{84}进程}\label{section}%mdk%mdk
+\mdline{84}其中n为处理器数目%mdk
 
-%mdk-data-line={85}
-\noindent\mdline{85}进程是一个活动的实体，包括程序的代码（代码段），数据（栈，堆和数据段）和状态（程序计数器和寄存器的值）。进程间不共享以上的内容。%mdk
+%mdk-data-line={86}
+\section{\mdline{86}4.\hspace*{0.5em}\mdline{86}并行程序基本概念}\label{section}%mdk%mdk
 
 %mdk-data-line={87}
-\subsection{\mdline{87}4.2.\hspace*{0.5em}\mdline{87}线程}\label{section}%mdk%mdk
+\subsection{\mdline{87}4.1.\hspace*{0.5em}\mdline{87}进程}\label{section}%mdk%mdk
 
 %mdk-data-line={88}
-\noindent\mdline{88}线程是在单个进程中的逻辑流，分别有各自独立的栈和寄存器。但同一个进程里的线程共享虚拟地址空间，因此线程间的数据可以互相访问（除了虚拟寄存器）。%mdk
+\noindent\mdline{88}进程是一个活动的实体，包括程序的代码（代码段），数据（栈，堆和数据段）和状态（程序计数器和寄存器的值）。进程间不共享以上的内容。%mdk
 
 %mdk-data-line={90}
-\subsection{\mdline{90}4.3.\hspace*{0.5em}\mdline{90}同步机制}\label{section}%mdk%mdk
+\subsection{\mdline{90}4.2.\hspace*{0.5em}\mdline{90}线程}\label{section}%mdk%mdk
 
 %mdk-data-line={91}
-\subsubsection{\mdline{91}4.3.1.\hspace*{0.5em}\mdline{91}互斥量}\label{section}%mdk%mdk
+\noindent\mdline{91}线程是在单个进程中的逻辑流，分别有各自独立的栈和寄存器。但同一个进程里的线程共享虚拟地址空间，因此线程间的数据可以互相访问（除了虚拟寄存器）。%mdk
 
-%mdk-data-line={92}
-\noindent\mdline{92}当某个线程对互斥量加锁后其他线程在该线程解锁之前无法加锁，因此被阻塞，实现互斥访问。%mdk
+%mdk-data-line={93}
+\subsection{\mdline{93}4.3.\hspace*{0.5em}\mdline{93}同步机制}\label{section}%mdk%mdk
 
 %mdk-data-line={94}
-\subsubsection{\mdline{94}4.3.2.\hspace*{0.5em}\mdline{94}临界区}\label{section}%mdk%mdk
+\subsubsection{\mdline{94}4.3.1.\hspace*{0.5em}\mdline{94}互斥量}\label{section}%mdk%mdk
 
 %mdk-data-line={95}
-\noindent\mdline{95}只有一个线程可以进入该区域，之后想进入的线程必须等待指导前一个线程离开。%mdk
+\noindent\mdline{95}当某个线程对互斥量加锁后其他线程在该线程解锁之前无法加锁，因此被阻塞，实现互斥访问。%mdk
 
 %mdk-data-line={97}
-\subsubsection{\mdline{97}4.3.3.\hspace*{0.5em}\mdline{97}信号量}\label{section}%mdk%mdk
+\subsubsection{\mdline{97}4.3.2.\hspace*{0.5em}\mdline{97}临界区}\label{section}%mdk%mdk
 
 %mdk-data-line={98}
-\noindent\mdline{98}信号量是一个整数变量。当信号量大于0时线程可以将其减一并继续执行；如果信号量等于零则线程被阻塞直到被通知。之前使信号量减一的进程完成任务后将信号量加一并通知等待的线程中的一个。%mdk
+\noindent\mdline{98}只有一个线程可以进入该区域，之后想进入的线程必须等待指导前一个线程离开。%mdk
 
 %mdk-data-line={100}
-\subsubsection{\mdline{100}4.3.4.\hspace*{0.5em}\mdline{100}条件变量}\label{section}%mdk%mdk
+\subsubsection{\mdline{100}4.3.3.\hspace*{0.5em}\mdline{100}信号量}\label{section}%mdk%mdk
 
 %mdk-data-line={101}
-\noindent\mdline{101}当给定的条件为真时该线程试图获得锁锁；完成任务后该线程给其他被阻塞的线程发信号进行唤醒。当给定条件为假时该线程阻塞直到受到信号（即使没有受到该线程仍会不定期自动唤醒），此时重新测试条件。%mdk
+\noindent\mdline{101}信号量是一个整数变量。当信号量大于0时线程可以将其减一并继续执行；如果信号量等于零则线程被阻塞直到被通知。之前使信号量减一的进程完成任务后将信号量加一并通知等待的线程中的一个。%mdk
 
 %mdk-data-line={103}
-\subsection{\mdline{103}4.4.\hspace*{0.5em}\mdline{103}死锁}\label{section}%mdk%mdk
+\subsubsection{\mdline{103}4.3.4.\hspace*{0.5em}\mdline{103}条件变量}\label{section}%mdk%mdk
 
 %mdk-data-line={104}
-\noindent\mdline{104}两个线程分别拥有一把对方想要的锁。此时双方都在等待对方解锁，但事实上谁都不会解锁，造成程序无法继续执行。%mdk
+\noindent\mdline{104}当给定的条件为真时该线程试图获得锁锁；完成任务后该线程给其他被阻塞的线程发信号进行唤醒。当给定条件为假时该线程阻塞直到受到信号（即使没有受到该线程仍会不定期自动唤醒），此时重新测试条件。%mdk
 
 %mdk-data-line={106}
-\subsection{\mdline{106}4.5.\hspace*{0.5em}\mdline{106}饥饿}\label{section}%mdk%mdk
+\subsection{\mdline{106}4.4.\hspace*{0.5em}\mdline{106}死锁}\label{section}%mdk%mdk
 
 %mdk-data-line={107}
-\noindent\mdline{107}某个线程由于某种原因无法获得继续执行的权限，只好一直处于阻塞状态。%mdk
+\noindent\mdline{107}两个线程分别拥有一把对方想要的锁。此时双方都在等待对方解锁，但事实上谁都不会解锁，造成程序无法继续执行。%mdk
 
 %mdk-data-line={109}
-\subsection{\mdline{109}4.6.\hspace*{0.5em}\mdline{109}数据竞争}\label{section}%mdk%mdk
+\subsection{\mdline{109}4.5.\hspace*{0.5em}\mdline{109}饥饿}\label{section}%mdk%mdk
 
 %mdk-data-line={110}
-\noindent\mdline{110}多个线程试图修改一个变量时会发生竞争。则常常是由于错误地假定线程调度存在依赖关系所导致的。%mdk
+\noindent\mdline{110}某个线程由于某种原因无法获得继续执行的权限，只好一直处于阻塞状态。%mdk
 
 %mdk-data-line={112}
-\section{\mdline{112}5.\hspace*{0.5em}\mdline{112}\mdcode{Windows}\mdline{112} 多线程 \mdline{112}\mdcode{API}}\label{sec-windows-api}%mdk%mdk
+\subsection{\mdline{112}4.6.\hspace*{0.5em}\mdline{112}数据竞争}\label{section}%mdk%mdk
 
-%mdk-data-line={114}
-\subsection{\mdline{114}5.1.\hspace*{0.5em}\mdline{114}\mdcode{Win32~API}\mdline{114} 示例}\label{sec-win32-api-}%mdk%mdk
+%mdk-data-line={113}
+\noindent\mdline{113}多个线程试图修改一个变量时会发生竞争。则常常是由于错误地假定线程调度存在依赖关系所导致的。%mdk
+
+%mdk-data-line={115}
+\section{\mdline{115}5.\hspace*{0.5em}\mdline{115}\mdcode{Windows}\mdline{115} 多线程编程}\label{sec-windows-}%mdk%mdk
+
+%mdk-data-line={117}
+\subsection{\mdline{117}5.1.\hspace*{0.5em}\mdline{117}\mdcode{Win32}\mdline{117} 标准示例}\label{sec-win32-}%mdk%mdk
 \begin{mdpre}%mdk
 \noindent\#define~{\mdcolor{teal}NUMTHREADS}~{\mdcolor{purple}4}\\
 {\mdcolor{teal}DWORD}~{\mdcolor{teal}WINAPI}~helloFunc({\mdcolor{teal}LPVOID}~arg)~\{\\
@@ -266,8 +269,64 @@ main()~\{\\
 ~~{\mdcolor{teal}WaitForMultipleObject}({\mdcolor{teal}NUMTHREADS},~hThread,~{\mdcolor{teal}TRUE},~{\mdcolor{teal}INFINITE});\\
 \}%mdk
 \end{mdpre}
-%mdk-data-line={128}
-\subsection{\mdline{128}5.2.\hspace*{0.5em}\mdline{128}通过\mdline{128}\emph{事件(Event)}\mdline{128}同步线程}\label{sec--event-}%mdk%mdk
+%mdk-data-line={131}
+\subsection{\mdline{131}5.2.\hspace*{0.5em}\mdline{131}线程同步机制}\label{section}%mdk%mdk
+
+%mdk-data-line={133}
+\subsubsection{\mdline{133}5.2.1.\hspace*{0.5em}\mdline{133}通过\mdline{133}\emph{临界区(Critial Section)}\mdline{133}同步线程}\label{sec--critial-section-}%mdk%mdk
+\begin{mdpre}%mdk
+\noindent\#define~{\mdcolor{teal}NUMTHREADS}~{\mdcolor{purple}4}\\
+{\mdcolor{teal}CRITICAL\_SECTION}~g\_cs;\\
+{\mdcolor{navy}int}~g\_sum~=~{\mdcolor{purple}0};\\
+{\mdcolor{teal}DWORD}~{\mdcolor{teal}WINAPI}~threadFunc({\mdcolor{teal}LPVOID}~arg)~\{\\
+~~g\_sum~+=~{\mdcolor{purple}1};\\
+~~{\mdcolor{navy}return}~{\mdcolor{purple}0};\\
+\}\\
+main()~\{\\
+~~{\mdcolor{teal}InitializeCriticalSection}(\&g\_cs);\\
+~~{\mdcolor{darkgreen}//~标准示例}\\
+~~{\mdcolor{teal}DeleteCriticalSection}(\&g\_cs);\\
+\}%mdk
+\end{mdpre}
+%mdk-data-line={149}
+\subsubsection{\mdline{149}5.2.2.\hspace*{0.5em}\mdline{149}通过\mdline{149}\emph{互斥量(Mutexes)}\mdline{149}同步线程}\label{sec--mutexes-}%mdk%mdk
+\begin{mdpre}%mdk
+\noindent\#define~{\mdcolor{teal}NUMTHREADS}~{\mdcolor{purple}4}\\
+{\mdcolor{navy}int}~g\_sum~=~{\mdcolor{purple}0};\\
+{\mdcolor{teal}DWORD}~{\mdcolor{teal}ThreadProc}()~\{\\
+~~{\mdcolor{teal}HANDLE}~hMutex;\\
+~~hMutex~=~{\mdcolor{teal}OpenMutex}({\mdcolor{teal}MUTEX\_ALL\_ACCESS},~{\mdcolor{teal}FALSE},~{\mdcolor{maroon}"}{\mdcolor{maroon}Mutex.Test}{\mdcolor{maroon}"});\\
+~~g\_sum~+=~{\mdcolor{purple}1};\\
+~~{\mdcolor{teal}ReleaseMutex}(hMutex);\\
+~~{\mdcolor{teal}CloseHandle}(hMutex);\\
+~~{\mdcolor{navy}return}~{\mdcolor{purple}0};\\
+\}\\
+main()~\{\\
+~~{\mdcolor{teal}HANDLE}~hMutex;\\
+~~hMutex~=~{\mdcolor{teal}OpenMutex}({\mdcolor{teal}MUTEX\_ALL\_ACCESS},~{\mdcolor{teal}FALSE},~{\mdcolor{maroon}"}{\mdcolor{maroon}Mutex.Test}{\mdcolor{maroon}"});\\
+~~hMutex~=~{\mdcolor{teal}CreateMutex}({\mdcolor{teal}NULL},~{\mdcolor{teal}FALSE},~{\mdcolor{maroon}"}{\mdcolor{maroon}Mutex.Test}{\mdcolor{maroon}"});\\
+~~{\mdcolor{darkgreen}//~标准示例}\\
+~~{\mdcolor{teal}CloseHandle}(hMutex);\\
+\}%mdk
+\end{mdpre}
+%mdk-data-line={170}
+\subsubsection{\mdline{170}5.2.3.\hspace*{0.5em}\mdline{170}通过\mdline{170}\emph{信号量(Semaphore)}\mdline{170} 同步线程}\label{sec--semaphore--}%mdk%mdk
+\begin{mdpre}%mdk
+\noindent\#define~{\mdcolor{teal}NUMTHREADS}~{\mdcolor{purple}4}\\
+{\mdcolor{teal}HANDLE}~hSem;\\
+{\mdcolor{navy}int}~g\_sum;\\
+{\mdcolor{teal}DWORD}~{\mdcolor{teal}WINAPI}~{\mdcolor{teal}CountFives}({\mdcolor{teal}LPVOID}~arg)~\{\\
+~~{\mdcolor{teal}WaitForSingleObject}(hSem,~{\mdcolor{teal}INFINIT});\\
+~~g\_sum~+=~{\mdcolor{purple}1};\\
+~~{\mdcolor{teal}ReleaseSemaphore}(hSem,~{\mdcolor{purple}1},~{\mdcolor{teal}NULL});\\
+\}\\
+main()~\{\\
+~~hSem~=~{\mdcolor{teal}CreateSemphore}({\mdcolor{teal}NULL},~{\mdcolor{purple}1},~{\mdcolor{purple}1},~{\mdcolor{teal}NULL});\\
+~~{\mdcolor{darkgreen}//~标准示例}\\
+\}%mdk
+\end{mdpre}
+%mdk-data-line={186}
+\subsubsection{\mdline{186}5.2.4.\hspace*{0.5em}\mdline{186}通过\mdline{186}\emph{事件(Event)}\mdline{186}同步线程}\label{sec--event-}%mdk%mdk
 \begin{mdpre}%mdk
 \noindent{\mdcolor{teal}HANDLE}~evRead,~evFinish;\\
 {\mdcolor{navy}void}~readThread({\mdcolor{teal}LPVOID}~param)~\{\\
@@ -285,68 +344,162 @@ main()~\{\\
 ~~{\mdcolor{teal}WaitForSingleObject}(evFinish,~{\mdcolor{teal}INFINITE});\\
 \}%mdk
 \end{mdpre}
-%mdk-data-line={147}
-\subsection{\mdline{147}5.3.\hspace*{0.5em}\mdline{147}通过\mdline{147}\emph{临界区(Critial Section)}\mdline{147}同步线程}\label{sec--critial-section-}%mdk%mdk
+%mdk-data-line={205}
+\section{\mdline{205}6.\hspace*{0.5em}\mdline{205}\mdcode{OpenMP}\mdline{205} 多线程编程}\label{sec-openmp-}%mdk%mdk
+
+%mdk-data-line={206}
+\subsection{\mdline{206}6.1.\hspace*{0.5em}\mdline{206}概述}\label{section}%mdk%mdk
+
+%mdk-data-line={207}
+\noindent\mdline{207}\mdcode{OpenMP}\mdline{207}使用编译制导语句，结合库和环境变量实现共享内存环境下的并行。指导语句结构如下：%mdk
 \begin{mdpre}%mdk
-\noindent\#define~{\mdcolor{teal}NUMTHREADS}~{\mdcolor{purple}4}\\
-{\mdcolor{teal}CRITICAL\_SECTION}~g\_cs;\\
-{\mdcolor{navy}int}~g\_sum~=~{\mdcolor{purple}0};\\
-{\mdcolor{teal}DWORD}~{\mdcolor{teal}WINAPI}~threadFunc({\mdcolor{teal}LPVOID}~arg)~\{\\
-~~g\_sum~+=~{\mdcolor{purple}1};\\
-~~{\mdcolor{navy}return}~{\mdcolor{purple}0};\\
-\}\\
-main()~\{\\
-~~{\mdcolor{teal}InitializeCriticalSection}(\&g\_cs);\\
-~~{\mdcolor{teal}HANDLE}~hThread[{\mdcolor{teal}NUMTHREADS}];\\
-~~{\mdcolor{navy}for}~({\mdcolor{navy}int}~i~=~{\mdcolor{purple}0};~i~\textless{}~{\mdcolor{teal}NUMTHREADS};~i++)\\
-~~~~hThread[i]~=~{\mdcolor{teal}CreateThread}({\mdcolor{teal}NULL},~{\mdcolor{purple}0},~threadFunc,~{\mdcolor{teal}NULL},~{\mdcolor{purple}0},~{\mdcolor{teal}NULL});\\
-~~{\mdcolor{teal}WaitForMultipleObject}({\mdcolor{teal}NUMTHREADS},~hThread,~{\mdcolor{teal}TRUE},~{\mdcolor{teal}INFINITE});\\
-~~{\mdcolor{teal}DeleteCriticalSection}(\&g\_cs);\\
-\}%mdk
+\noindent~~\#pragma~omp~construct~[clause~[clause]~...]%mdk
 \end{mdpre}
-%mdk-data-line={166}
-\subsection{\mdline{166}5.4.\hspace*{0.5em}\mdline{166}通过\mdline{166}\emph{互斥量(Mutexes)}\mdline{166}同步线程}\label{sec--mutexes-}%mdk%mdk
+%mdk-data-line={213}
+\subsection{\mdline{213}6.2.\hspace*{0.5em}\mdline{213}数据并行}\label{section}%mdk%mdk
+
+%mdk-data-line={214}
+\subsubsection{\mdline{214}6.2.1.\hspace*{0.5em}\mdline{214}使用\mdline{214}\emph{并行区域}\mdline{214}实现}\label{sec---}%mdk%mdk
+
+%mdk-data-line={215}
+\noindent\mdline{215}\emph{并行区域}\mdline{215}指的是多个线程重复执行某一区域的代码。注意：在最后一个线程执行完并行区域之前所有线程均被阻塞。可以使用\mdline{215}\mdcode{nowait}\mdline{215}表示符关闭同步。%mdk
 \begin{mdpre}%mdk
-\noindent\#define~{\mdcolor{teal}NUMTHREADS}~{\mdcolor{purple}4}\\
-{\mdcolor{navy}int}~g\_sum~=~{\mdcolor{purple}0};\\
-{\mdcolor{teal}DWORD}~{\mdcolor{teal}ThreadProc}()~\{\\
-~~{\mdcolor{teal}HANDLE}~hMutex;\\
-~~hMutex~=~{\mdcolor{teal}OpenMutex}({\mdcolor{teal}MUTEX\_ALL\_ACCESS},~{\mdcolor{teal}FALSE},~{\mdcolor{maroon}"}{\mdcolor{maroon}Mutex.Test}{\mdcolor{maroon}"});\\
-~~g\_sum~+=~{\mdcolor{purple}1};\\
-~~{\mdcolor{teal}ReleaseMutex}(hMutex);\\
-~~{\mdcolor{teal}CloseHandle}(hMutex);\\
-~~{\mdcolor{navy}return}~{\mdcolor{purple}0};\\
-\}\\
-main()~\{\\
-~~{\mdcolor{teal}HANDLE}~hMutex;\\
-~~hMutex~=~{\mdcolor{teal}OpenMutex}({\mdcolor{teal}MUTEX\_ALL\_ACCESS},~{\mdcolor{teal}FALSE},~{\mdcolor{maroon}"}{\mdcolor{maroon}Mutex.Test}{\mdcolor{maroon}"});\\
-~~hMutex~=~{\mdcolor{teal}CreateMutex}({\mdcolor{teal}NULL},~{\mdcolor{teal}FALSE},~{\mdcolor{maroon}"}{\mdcolor{maroon}Mutex.Test}{\mdcolor{maroon}"});\\
-~~{\mdcolor{teal}HANDLE}~hThread[{\mdcolor{teal}NUMTHREADS}];\\
-~~{\mdcolor{navy}for}~({\mdcolor{navy}int}~i~=~{\mdcolor{purple}0};~i~\textless{}~{\mdcolor{teal}NUMTHREADS};~i++)\\
-~~~~hThread[i]~=~{\mdcolor{teal}CreateThread}({\mdcolor{teal}NULL},~{\mdcolor{purple}0},~threadProc,~{\mdcolor{teal}NULL},~{\mdcolor{purple}0},~{\mdcolor{teal}NULL});\\
-~~{\mdcolor{teal}WaitForMultipleObject}({\mdcolor{teal}NUMTHREADS},~hThread,~{\mdcolor{teal}TRUE},~{\mdcolor{teal}INFINITE});\\
-~~{\mdcolor{teal}CloseHandle}(hMutex);\\
-\}%mdk
+\noindent~~omp\_set\_num\_threads({\mdcolor{purple}4});\\
+~~\#pragma~omp~parallel\\
+~~\{\\
+~~~~{\mdcolor{navy}int}~{\mdcolor{teal}ID}~=~omp\_get\_thread\_num();\\
+~~\}%mdk
 \end{mdpre}
-%mdk-data-line={190}
-\subsection{\mdline{190}5.5.\hspace*{0.5em}\mdline{190}通过\mdline{190}\emph{信号量(Semaphore)}\mdline{190} 同步线程}\label{sec--semaphore--}%mdk%mdk
+%mdk-data-line={224}
+\subsubsection{\mdline{224}6.2.2.\hspace*{0.5em}\mdline{224}使用 \mdline{224}\mdcode{pragma~omp~for}\mdline{224}实现}\label{sec--pragma-omp-for}%mdk%mdk
+
+%mdk-data-line={225}
+\noindent\mdline{225}指导语句\mdline{225}\mdcode{\#pragma~omp~for}\mdline{225} 建立在 \mdline{225}\mdcode{\#pragma~omp~parallel}\mdline{225}创建线程的基础上，实现多个线程自动分割循环。%mdk
 \begin{mdpre}%mdk
-\noindent\#define~{\mdcolor{teal}NUMTHREADS}~{\mdcolor{purple}4}\\
-{\mdcolor{teal}HANDLE}~hSem;\\
-{\mdcolor{navy}int}~g\_sum;\\
-{\mdcolor{teal}DWORD}~{\mdcolor{teal}WINAPI}~{\mdcolor{teal}CountFives}({\mdcolor{teal}LPVOID}~arg)~\{\\
-~~{\mdcolor{teal}WaitForSingleObject}(hSem,~{\mdcolor{teal}INFINIT});\\
-~~g\_sum~+=~{\mdcolor{purple}1};\\
-~~{\mdcolor{teal}ReleaseSemaphore}(hSem,~{\mdcolor{purple}1},~{\mdcolor{teal}NULL});\\
-\}\\
-main()~\{\\
-~~hSem~=~{\mdcolor{teal}CreateSemphore}({\mdcolor{teal}NULL},~{\mdcolor{purple}1},~{\mdcolor{purple}1},~{\mdcolor{teal}NULL});\\
-~~{\mdcolor{teal}HANDLE}~hThread[{\mdcolor{teal}NUMTHREADS}];\\
-~~{\mdcolor{navy}for}~({\mdcolor{navy}int}~i~=~{\mdcolor{purple}0};~i~\textless{}~{\mdcolor{teal}NUMTHREADS};~i++)\\
-~~~~hThread[i]~=~{\mdcolor{teal}CreateThread}({\mdcolor{teal}NULL},~{\mdcolor{purple}0},~threadProc,~{\mdcolor{teal}NULL},~{\mdcolor{purple}0},~{\mdcolor{teal}NULL});\\
-~~{\mdcolor{teal}WaitForMultipleObject}({\mdcolor{teal}NUMTHREADS},~hThread,~{\mdcolor{teal}TRUE},~{\mdcolor{teal}INFINITE});\\
-\}%mdk
-\end{mdpre}%mdk
+\noindent~~\#pragma~omp~parallel\\
+~~\#pragma~omp~{\mdcolor{navy}for}\\
+~~{\mdcolor{navy}for}~({\mdcolor{navy}int}~i~=~{\mdcolor{purple}0};~i~\textless{}~{\mdcolor{teal}N};~i++)\\
+~~~~c[i]~=~a[i]~+~b[i];%mdk
+\end{mdpre}
+%mdk-data-line={233}
+\subsection{\mdline{233}6.3.\hspace*{0.5em}\mdline{233}指令并行}\label{section}%mdk%mdk
+
+%mdk-data-line={234}
+\noindent\mdline{234}\mdcode{OpenMP}\mdline{234}使用\mdline{234}\emph{并行区(Parallel Sections)}\mdline{234}为线程分配任务，即指令并行而非数据并行。%mdk
+\begin{mdpre}%mdk
+\noindent~~\#pragma~omp~parallel~sections\\
+~~\{\\
+~~~~\#pragma~omp~section\\
+~~~~phase1();\\
+~~~~\#pragma~omp~section\\
+~~~~phase2();\\
+~~~~\#pragma~omp~section\\
+~~~~phase3();\\
+~~\}%mdk
+\end{mdpre}
+%mdk-data-line={247}
+\subsection{\mdline{247}6.4.\hspace*{0.5em}\mdline{247}其他制导语句}\label{section}%mdk%mdk
+
+%mdk-data-line={248}
+\subsubsection{\mdline{248}6.4.1.\hspace*{0.5em}\mdline{248}私有变量}\label{section}%mdk%mdk
+
+%mdk-data-line={249}
+\noindent\mdline{249}在并行区外的变量均为所有线程共享，可以通过在\mdline{249}\mdcode{omp~parallel~for}\mdline{249}后接入\mdline{249}\mdcode{private}\mdline{249}来声明某变量为各个线程所私有：%mdk
+\begin{mdpre}%mdk
+\noindent~~{\mdcolor{navy}float}~x,~y;~{\mdcolor{navy}int}~i;\\
+~~\#pragma~omp~parallel~{\mdcolor{navy}for}~{\mdcolor{navy}private}(x,~y)\\
+~~{\mdcolor{navy}for}~(i~=~{\mdcolor{purple}0};~i~\textless{}~{\mdcolor{teal}N};~i++)\\
+~~~~c[i]~=~x~+~y;%mdk
+\end{mdpre}
+%mdk-data-line={257}
+\subsubsection{\mdline{257}6.4.2.\hspace*{0.5em}\mdline{257}原子性}\label{section}%mdk%mdk
+
+%mdk-data-line={258}
+\noindent\mdline{258}某操作为\mdline{258}\emph{原子的}\mdline{258}指该操作不可分割成更小的操作，因此不会受到线程竞争的影响。%mdk
+\begin{mdpre}%mdk
+\noindent~~\#pragma~omp~parallel~{\mdcolor{navy}for}\\
+~~{\mdcolor{navy}for}~({\mdcolor{navy}int}~i~=~{\mdcolor{purple}0};~i~\textless{}~n;~i++)\\
+~~~~\#pragma~omp~atmoic\\
+~~~~c[i]~+=~i;%mdk
+\end{mdpre}
+%mdk-data-line={266}
+\section{\mdline{266}7.\hspace*{0.5em}\mdline{266}并行算法的通信开销}\label{section}%mdk%mdk
+
+%mdk-data-line={267}
+\subsection{\mdline{267}7.1.\hspace*{0.5em}\mdline{267}开销模型}\label{section}%mdk%mdk
+
+%mdk-data-line={268}
+\begin{itemize}[noitemsep,topsep=\mdcompacttopsep]%mdk
+
+%mdk-data-line={268}
+\item\mdline{268}\emph{Startup time(t\mdsub{s})}\mdline{268}: 算法启动时间。%mdk
+
+%mdk-data-line={269}
+\item\mdline{269}\emph{Per-hop time(t\mdsub{h})}\mdline{269}: 在每一跳（节点）上需要的转发/存储延迟。由路由器的延迟决定。%mdk
+
+%mdk-data-line={270}
+\item\mdline{270}\emph{Per-word transfer time(t\mdsub{w})}\mdline{270}: 在链路上传输每个字所需要的时间。由链路带宽决定。%mdk
+%mdk
+\end{itemize}%mdk
+
+%mdk-data-line={273}
+\subsection{\mdline{273}7.2.\hspace*{0.5em}\mdline{273}通信模型}\label{section}%mdk%mdk
+
+%mdk-data-line={275}
+\subsubsection{\mdline{275}7.2.1.\hspace*{0.5em}\mdline{275}储存转发模型}\label{section}%mdk%mdk
+
+%mdk-data-line={276}
+\noindent\mdline{276}$t_{comm} = t_s +l(mt_w+t_h)$\mdline{276}%mdk
+
+%mdk-data-line={278}
+\mdline{278}其中所需传递的包为m个字，需要l跳完成转发。%mdk
+
+%mdk-data-line={280}
+\mdline{280}t\mdline{280}\mdsub{h}\mdline{280}较小的时可简化为：%mdk
+
+%mdk-data-line={282}
+\mdline{282}$t_{comm} = t_s + lmt_w$\mdline{282}%mdk
+
+%mdk-data-line={285}
+\subsubsection{\mdline{285}7.2.2.\hspace*{0.5em}\mdline{285}分组路由模型}\label{section}%mdk%mdk
+
+%mdk-data-line={287}
+\noindent\mdline{287}$t_{comm} = t_s + mt_w+ lt_h$\mdline{287}%mdk
+
+%mdk-data-line={289}
+\mdline{289}注意由于使用了分组路由，当t\mdline{289}\mdsub{h}\mdline{289}较小时只需要：%mdk
+
+%mdk-data-line={291}
+\mdline{291}$t_{comm} = t_s + mt_w$\mdline{291}%mdk
+
+%mdk-data-line={293}
+\subsection{\mdline{293}7.3.\hspace*{0.5em}\mdline{293}不同通信方式的开销}\label{section}%mdk%mdk
+
+%mdk-data-line={294}
+\noindent\mdline{294}我们以\mdline{294}\emph{圆环（ring)}\mdline{294}、\mdline{294}\emph{网格环(Grid-torus)}\mdline{294}和\mdline{294}\emph{超立方体(Hypercube)}\mdline{294}在分组路由的情况下进行分析。%mdk
+
+%mdk-data-line={296}
+\subsubsection{\mdline{296}7.3.1.\hspace*{0.5em}\mdline{296}点对点通信}\label{section}%mdk%mdk
+
+%mdk-data-line={297}
+\begin{itemize}[noitemsep,topsep=\mdcompacttopsep]%mdk
+
+%mdk-data-line={297}
+\item\mdline{297}圆环：\mdline{297}$t_{comm} = t_s + mt_w$\mdline{297}%mdk
+
+%mdk-data-line={298}
+\item\mdline{298}网格环：t\mdline{298}\_\mdline{298}\{comm\} = \mdline{298}$t_s + mt_w$\mdline{298}%mdk
+
+%mdk-data-line={299}
+\item\mdline{299}超立方体：\mdline{299}$t_{comm} = t_s + mt_w$\mdline{299}%mdk
+%mdk
+\end{itemize}%mdk
+
+%mdk-data-line={301}
+\noindent\mdline{301}此时三者的开销相等。%mdk
+
+%mdk-data-line={303}
+\subsubsection{\mdline{303}7.3.2.\hspace*{0.5em}\mdline{303}一对多广播/多对一规约}\label{section}%mdk%mdk%mdk
 
 
 \end{document}
