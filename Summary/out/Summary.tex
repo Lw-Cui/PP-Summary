@@ -485,13 +485,13 @@ main()~\{\\
 \begin{itemize}[noitemsep,topsep=\mdcompacttopsep]%mdk
 
 %mdk-data-line={297}
-\item\mdline{297}圆环：\mdline{297}$t_{comm} = t_s + mt_w$\mdline{297}%mdk
+\item\mdline{297}圆环：\mdline{297}$t_{sum} = t_s + mt_w$\mdline{297}%mdk
 
 %mdk-data-line={298}
-\item\mdline{298}网格环：t\mdline{298}\_\mdline{298}\{comm\} = \mdline{298}$t_s + mt_w$\mdline{298}%mdk
+\item\mdline{298}网格环：\mdline{298}$t_{sum} = t_s + mt_w$\mdline{298}%mdk
 
 %mdk-data-line={299}
-\item\mdline{299}超立方体：\mdline{299}$t_{comm} = t_s + mt_w$\mdline{299}%mdk
+\item\mdline{299}超立方体：\mdline{299}$t_{sum} = t_s + mt_w$\mdline{299}%mdk
 %mdk
 \end{itemize}%mdk
 
@@ -499,7 +499,151 @@ main()~\{\\
 \noindent\mdline{301}此时三者的开销相等。%mdk
 
 %mdk-data-line={303}
-\subsubsection{\mdline{303}7.3.2.\hspace*{0.5em}\mdline{303}一对多广播/多对一规约}\label{section}%mdk%mdk%mdk
+\subsubsection{\mdline{303}7.3.2.\hspace*{0.5em}\mdline{303}一对多广播/多对一规约}\label{section}%mdk%mdk
+
+%mdk-data-line={304}
+\begin{itemize}[noitemsep,topsep=\mdcompacttopsep]%mdk
+
+%mdk-data-line={304}
+\item\mdline{304}圆环： \mdline{304}$t_{sum} = (t_s + mt_w) \log _2 p$\mdline{304}%mdk
+
+%mdk-data-line={305}
+\item\mdline{305}网格环： \mdline{305}$t_{sum} = (t_s + mt_w) \log _2 p$\mdline{305}%mdk
+
+%mdk-data-line={306}
+\item\mdline{306}超立方体： \mdline{306}$t_{sum} = (t_s + mt_w) \log _2 p$\mdline{306}%mdk
+%mdk
+\end{itemize}%mdk
+
+%mdk-data-line={308}
+\noindent\mdline{308}此时三者仍然相等，这里p为处理器数目。每个接收到数据包的节点继续发送，因此时间为对数形式。%mdk
+
+%mdk-data-line={310}
+\subsubsection{\mdline{310}7.3.3.\hspace*{0.5em}\mdline{310}多对多广播/多对多规约}\label{section}%mdk%mdk
+
+%mdk-data-line={311}
+\begin{itemize}[noitemsep,topsep=\mdcompacttopsep]%mdk
+
+%mdk-data-line={311}
+\item\mdline{311}圆环：\mdline{311}$t_{sum} = (t_s + mt_w)(p - 1)$\mdline{311} 为了最大限度利用带宽，每个点直接向对方发送自己新获得的数据%mdk
+
+%mdk-data-line={312}
+\item\mdline{312}网格环： \mdline{312}$t_{sum} = 2t_s(\sqrt {p} - 1) + mt_w(p  - 1)$\mdline{312} 横向进行圆环型广播，之后进行纵向广播%mdk
+
+%mdk-data-line={313}
+\item\mdline{313}超立方体： \mdline{313}$t_{sum} = t_s{\log _2 p} + mt_w(p - 1)$\mdline{313}  每个点分别和前后，上下，左右的点进行数据的交换%mdk
+%mdk
+\end{itemize}%mdk
+
+%mdk-data-line={315}
+\subsection{\mdline{315}7.4.\hspace*{0.5em}\mdline{315}开销模型}\label{section}%mdk%mdk
+
+%mdk-data-line={316}
+\begin{itemize}[noitemsep,topsep=\mdcompacttopsep]%mdk
+
+%mdk-data-line={316}
+\item\mdline{316}\emph{Startup time(t\mdsub{s})}\mdline{316}: 算法启动时间。%mdk
+
+%mdk-data-line={317}
+\item\mdline{317}\emph{Per-hop time(t\mdsub{h})}\mdline{317}: 在每一跳（节点）上需要的转发/存储延迟。由路由器的延迟决定。%mdk
+
+%mdk-data-line={318}
+\item\mdline{318}\emph{Per-word transfer time(t\mdsub{w})}\mdline{318}: 在链路上传输每个字所需要的时间。由链路带宽决定。%mdk
+%mdk
+\end{itemize}%mdk
+
+%mdk-data-line={321}
+\subsection{\mdline{321}7.5.\hspace*{0.5em}\mdline{321}通信模型}\label{section}%mdk%mdk
+
+%mdk-data-line={323}
+\subsubsection{\mdline{323}7.5.1.\hspace*{0.5em}\mdline{323}储存转发模型}\label{section}%mdk%mdk
+
+%mdk-data-line={324}
+\noindent\mdline{324}$t_{comm} = t_s +l(mt_w+t_h)$\mdline{324}%mdk
+
+%mdk-data-line={326}
+\mdline{326}其中所需传递的包为m个字，需要l跳完成转发。%mdk
+
+%mdk-data-line={328}
+\mdline{328}t\mdline{328}\mdsub{h}\mdline{328}较小的时可简化为：%mdk
+
+%mdk-data-line={330}
+\mdline{330}$t_{comm} = t_s + lmt_w$\mdline{330}%mdk
+
+%mdk-data-line={333}
+\subsubsection{\mdline{333}7.5.2.\hspace*{0.5em}\mdline{333}分组路由模型}\label{section}%mdk%mdk
+
+%mdk-data-line={335}
+\noindent\mdline{335}$t_{comm} = t_s + mt_w+ lt_h$\mdline{335}%mdk
+
+%mdk-data-line={337}
+\mdline{337}注意由于使用了分组路由，当t\mdline{337}\mdsub{h}\mdline{337}较小时只需要：%mdk
+
+%mdk-data-line={339}
+\mdline{339}$t_{comm} = t_s + mt_w$\mdline{339}%mdk
+
+%mdk-data-line={341}
+\subsection{\mdline{341}7.6.\hspace*{0.5em}\mdline{341}不同通信方式的开销}\label{section}%mdk%mdk
+
+%mdk-data-line={342}
+\noindent\mdline{342}我们以\mdline{342}\emph{圆环（ring)}\mdline{342}、\mdline{342}\emph{网格环(Grid-torus)}\mdline{342}和\mdline{342}\emph{超立方体(Hypercube)}\mdline{342}在分组路由的情况下进行分析。%mdk
+
+%mdk-data-line={344}
+\subsubsection{\mdline{344}7.6.1.\hspace*{0.5em}\mdline{344}点对点通信}\label{section}%mdk%mdk
+
+%mdk-data-line={345}
+\begin{itemize}[noitemsep,topsep=\mdcompacttopsep]%mdk
+
+%mdk-data-line={345}
+\item\mdline{345}圆环：\mdline{345}$t_{sum} = t_s + mt_w$\mdline{345}%mdk
+
+%mdk-data-line={346}
+\item\mdline{346}网格环：\mdline{346}$t_{sum} = t_s + mt_w$\mdline{346}%mdk
+
+%mdk-data-line={347}
+\item\mdline{347}超立方体：\mdline{347}$t_{sum} = t_s + mt_w$\mdline{347}%mdk
+%mdk
+\end{itemize}%mdk
+
+%mdk-data-line={349}
+\noindent\mdline{349}此时三者的开销相等。%mdk
+
+%mdk-data-line={351}
+\subsubsection{\mdline{351}7.6.2.\hspace*{0.5em}\mdline{351}一对多广播/多对一规约}\label{section}%mdk%mdk
+
+%mdk-data-line={352}
+\begin{itemize}[noitemsep,topsep=\mdcompacttopsep]%mdk
+
+%mdk-data-line={352}
+\item\mdline{352}圆环： \mdline{352}$t_{sum} = (t_s + mt_w) \log _2 p$\mdline{352}%mdk
+
+%mdk-data-line={353}
+\item\mdline{353}网格环： \mdline{353}$t_{sum} = (t_s + mt_w) \log _2 p$\mdline{353}%mdk
+
+%mdk-data-line={354}
+\item\mdline{354}超立方体： \mdline{354}$t_{sum} = (t_s + mt_w) \log _2 p$\mdline{354}%mdk
+%mdk
+\end{itemize}%mdk
+
+%mdk-data-line={356}
+\noindent\mdline{356}此时三者仍然相等，这里p为处理器数目。每个接收到数据包的节点继续发送，因此时间为对数形式。%mdk
+
+%mdk-data-line={358}
+\subsubsection{\mdline{358}7.6.3.\hspace*{0.5em}\mdline{358}多对多广播/多对多规约}\label{section}%mdk%mdk
+
+%mdk-data-line={359}
+\begin{itemize}[noitemsep,topsep=\mdcompacttopsep]%mdk
+
+%mdk-data-line={359}
+\item\mdline{359}圆环：\mdline{359}$t_{sum} = (t_s + mt_w)(p - 1)$\mdline{359} 为了最大限度利用带宽，每个点直接向对方发送自己新获得的数据%mdk
+
+%mdk-data-line={360}
+\item\mdline{360}网格环： \mdline{360}$t_{sum} = 2t_s(\sqrt {p} - 1) + mt_w(p  - 1)$\mdline{360} 横向进行圆环型广播，之后进行纵向广播%mdk
+
+%mdk-data-line={361}
+\item\mdline{361}超立方体：  \mdline{361}$t_{sum} = t_s{\log _2 p} + mt_w(p - 1)$\mdline{361}  每个点分别和前后，上下，左右的点进行数据的交换%mdk
+%mdk
+\end{itemize}%mdk%mdk
 
 
 \end{document}
