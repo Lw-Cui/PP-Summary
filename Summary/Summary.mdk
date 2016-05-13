@@ -11,7 +11,7 @@ Locale        : Chinese
 [TITLE]
 
 ~ Abstract
-本文是哈尔滨工业大学《并行程序设计》一课的重点总结，内容涵盖了并行程序总论，分类和方法论，概念辨析和具体的实现方法以及性能分析。其中加入了许多作者的理解。
+本文是哈尔滨工业大学《并行程序设计》一课的重点总结，内容包括并行程序基本概念、设计方法论、不同编程模型的实现、通信性能分析、同步操作和并行一致性。
 ~
 
 [TOC]
@@ -268,6 +268,70 @@ main() {
     c[i] += i;
 ```
 
+# 消息传递*(Message-Passing Paradigm)*编程
+## 消息传递模型*(Message-Passing Model)*
+在该模型中每个处理器负责一个单独进程，因此并不共享地址空间。通信需要通过子例程进行数据包的转移。所以包的传递可以同步或异步进行。
+
+## `MPI` 编程
+`MPI`是一个提供消息传递例程的库。
+### `MPI`基础操作
+
+* 初始化和销毁:
+```java
+  MPI_Init(int *argc, char ***argv);
+  MPI_Finalize();
+```
+* 获取自身所处的通信域的大小和标号:
+```java
+  MPI_Comm_Size(MPI_Comm comm, int *size);
+  MPI_Comm_rank(MPI_Comm comm, int *rank);
+```
+
+### `MPI`数据包的收接
+* 阻塞的发送和接收：
+```java
+  MPI_Send(void *buf, int count, MPI_Datatype datatype,\
+      int dest, int tag, MPI_Comm comm);
+   
+  MPI_Recv(void *buf, int count, MPI_Datatype datatype, \
+      int source, int tag, MPI_Comm comm, MPI_Status *status);
+ ```
+* 非阻塞的发送接收和测试：
+```java
+  MPI_Isend(void *buf, int count, MPI_Datatype datatype,\
+      int dest, int tag, MPI_Comm comm, MPI_Request* request);
+      
+  MPI_Irecv(void *buf, int count, MPI_Datatype datatype,\
+      int source, int tag, MPI_Comm comm, MPI_Request *request);
+   
+  MPI_test(MPI_Rquest *request, int *flag, MPI_Status *status);
+```
+
+### `MPI`的集群通信*(Collective Communication)*
+`MPI`支持以下类型：
+
+* 聚集和散发
+  ```java
+  MPI_Gather(void *sendbuf, int sendcount, MPI_datatype senddatatype,\
+      void *recvbuf, int recvcount, MPI_Datatype recvdatatype,\
+      int target, MPI_Comm comm);
+      
+  MPI_Scatter(void *sendbuf, int sendcount, MPI_datatype senddatatype,\
+      void *recvbuf, int recvcount, MPI_Datatype recvdatatype,\
+      int source, MPI_Comm comm);
+  ```
+* 规约
+```java
+  MPI_Allreduce(void *sendbuf, void *recvbuf, int count, MPI_Datatype,\
+      MPI_Op op, MPI_Comm comm);
+```
+* 定制
+```java
+  MPI_Alltoall(void *sendbuf, int sendcount, MPI_datatype senddatatype,\
+      void *recvbuf, int recvcount, MPI_Datatype recvdatatype,\
+      MPI_Comm comm);
+```
+
 # 并行算法的通信开销*(Communication costs)*
 
 ## 开销模型*(Cost model)*
@@ -325,6 +389,13 @@ $t_{comm} = t_s + mt_w$
 * 圆环：$t_{sum} = (t_s + mt_w)(p - 1)$ 
 * 网格环： $t_{sum} = 2t_s(\sqrt {p} - 1) + mt_w(p  - 1)$
 * 超立方体：  $t_{sum} = \sum^{\log _2 p}_{i=1}{(t_s+2^{i - 1}m{t_w})}$(即$t_{sum} = t_s{\log _2 p} + mt_w(p - 1)$)
+
+### 多对多定制*(All-to-All Personalized)*
+每个节点都需要给其余所有节点发送不同的信息，而在多对多广播中每个节点只需要发送同样的信息，因此两者不同。
+
+* 圆环：$t_{sum} = {\sum^{p-1}_{i=1}{(t_s + mt_w(p - i))}}$(即$t_{sum} = (t_s + mpt_w/2)(p - 1)$)
+* 网格环：$t_{sum} = (2t_s + mpt_w)(\sqrt{p}-1)$
+* 超立方体：$t_{sum} = (t_s + mt_w)(p-1)$
 
 # 同步*(Synchronization)*操作
 
