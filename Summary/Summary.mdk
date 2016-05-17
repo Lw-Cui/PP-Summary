@@ -132,7 +132,7 @@ main() {
 }
 ```
 
-## 线程同步机制*(Synchronization)*
+## `Win32`下线程同步机制*(Synchronization)*
 
 ### 通过临界区*(Critial Section)*同步线程
 ```java
@@ -204,6 +204,49 @@ main() {
   _beginthread(WriteThread, 0, NULL);
   WaitForSingleObject(evFinish, INFINITE);
 }
+```
+
+# `Linux` 多线程编程
+## `Pthread`标准程序示例
+```java
+  void *compute(void *);
+  main() {
+    pthread_t p_thread;
+    pthread_attr_t attr;
+    pthread_attr_init(&attr);
+    int hits = 0;
+    pthread_create(&p_thread,, &attr, compute, (void*)&hits);
+    pthread_join(p_thread, NULL);
+  }
+```
+## `Pthread`下线程同步机制*(Synchronization)*
+### 互斥量*(Mutex)*
+```java
+  pthread_mutex_t lock;
+  lock = PTHREAD_MUTEX_INITIALIZER;
+  pthread_mutex_lock(&lock);
+  /* do exclusive job */
+  pthread_mutex_unlock(&lock);
+``` 
+
+### 条件变量*(Condition Variables)*
+* 初始化条件变量
+```java
+ pthread_mutex_t mut = PTHREAD_MUTEX_INITIALIZER;
+ pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
+```
+* 发出信号
+```java
+  pthread_mutex_lock(&mut);
+  if (...) pthread_cond_signal(&cond);
+  pthread_mutex_unlock(&mut);
+```
+* 等待信号
+```java
+  pthread_mutex_lock(&mut);
+  while (...) pthread_cond_wait(&cond, &mut);
+  /* operation */
+  pthread_mutex_unlock(&mut);
 ```
 
 # `OpenMP` 多线程编程
